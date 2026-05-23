@@ -3,9 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>birthday</title>
+	<title>BD-Susan</title>
 </head>
 <body>
+	
 	
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,7 +52,7 @@
 	display: flex; gap: 10px; z-index: 20; flex-wrap: wrap; justify-content: center;
   }
   .btn {
-	padding: 10px 18px; border-radius: 40px; border: 2px solid rgba(80,180,60,0.5);
+	padding: 10px 18px; border-radius: 20px 0 20px 0; border: 2px solid rgba(80,180,60,0.5);
 	background: rgba(255,255,255,0.3); color: #2a6020; font-size: 14px; cursor: pointer;
 	backdrop-filter: blur(8px); transition: all 0.25s; font-weight: 600;
   }
@@ -134,7 +135,7 @@
 	  <span class="title-happy">Happy</span>
 	  <span class="title-birth">Birthday</span>
 	</div>
-	<span class="title-sub">celebrating you</span>
+	<span class="title-sub">celebrating Susan</span>
 	<span class="title-icons">🌸 &nbsp; 🎂 &nbsp; 🌷</span>
   </div>
 
@@ -150,8 +151,15 @@
   <div id="cakeWrap">
 	<svg class="cake-svg" width="220" height="280" viewBox="0 0 220 280">
 	  <defs>
-		<radialGradient id="cg1" cx="50%" cy="30%"><stop offset="0%" stop-color="#f0a0c8"/><stop offset="100%" stop-color="#c060a0"/></radialGradient>
-		<radialGradient id="cg2" cx="50%" cy="30%"><stop offset="0%" stop-color="#a8e890"/><stop offset="100%" stop-color="#60b040"/></radialGradient>
+<radialGradient id="cg1" cx="50%" cy="30%">
+  <stop offset="0%" stop-color="#ffe066"/>
+  <stop offset="100%" stop-color="#c8900a"/>
+</radialGradient>
+
+<radialGradient id="cg2" cx="50%" cy="30%">
+  <stop offset="0%" stop-color="#ffd700"/>
+  <stop offset="100%" stop-color="#b8760a"/>
+</radialGradient>
 	  </defs>
 	  <ellipse cx="110" cy="252" rx="90" ry="14" fill="rgba(100,180,60,0.2)"/>
 	  <rect x="30" y="190" width="160" height="60" rx="8" fill="url(#cg1)"/>
@@ -210,9 +218,9 @@ resize(); window.addEventListener('resize', resize);
 const W = () => bgCanvas.width, H = () => bgCanvas.height;
 
 const PHOTOS = [
-  'https://i.ibb.co/prMSyVj1/Screenshot-2.png',
-  'https://i.ibb.co/rfG8331s/Screenshot-2026-01-23-090126.png',
-  'https://i.ibb.co/prMSyVj1/Screenshot-2.png',
+  'https://www.dropbox.com/scl/fi/36knlmxliwjd6ov94fn2b/Photo-23.05.26-15-34-12.jpg?rlkey=g509vmdw6hz4ox33ksrq8k5b7&st=95xi0zoe&dl=1',
+  'https://www.dropbox.com/scl/fi/uuxz5p1qtp07g0f28vcev/Photo-23.05.26-15-34-12-3-1.jpg?rlkey=iq2lwx1noac55mi5o0h9z05of&st=cn4kqaf9&dl=1',
+  'https://www.dropbox.com/scl/fi/jw5tqo8vbvjf3dh7s6rg1/Photo-23.05.26-15-34-12-2.jpg?rlkey=n41iendud1vs9uuinotx59d48&st=zsw3dqg9&dl=1',
 ];
 
 function placePhotos() {
