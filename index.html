@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>birthday</title>
+</head>
+<body>
+    
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  #scene {
+    width: 100%; min-height: 100vh; position: relative;
+    background: linear-gradient(180deg, #a8d8f0 0%, #c8eafa 25%, #d4f0c0 60%, #b8e890 100%);
+    font-family: sans-serif; overflow: hidden;
+  }
+  canvas#bgCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+  canvas#fxCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+
+  .photo-frame {
+    position: absolute; width: 110px; height: 110px; border-radius: 50%;
+    border: 3px solid rgba(120,200,100,0.85);
+    box-shadow: 0 0 18px rgba(100,200,80,0.5), 0 0 40px rgba(200,240,100,0.3);
+    overflow: hidden; z-index: 5; animation: floatPhoto 5s ease-in-out infinite;
+    cursor: pointer; transition: transform 0.3s;
+  }
+  .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-frame:hover { transform: scale(1.15) !important; }
+  @keyframes floatPhoto {
+    0%,100% { transform: translateY(0px) rotate(-2deg); }
+    50% { transform: translateY(-18px) rotate(2deg); }
+  }
+
+  #lightbox {
+    display: none; position: fixed; inset: 0; z-index: 999;
+    background: rgba(0,0,0,0.85); align-items: center; justify-content: center; cursor: pointer;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 90vw; max-height: 85vh; border-radius: 16px;
+    border: 3px solid rgba(120,210,100,0.8);
+    box-shadow: 0 0 60px rgba(100,200,80,0.5);
+    animation: lbIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275); cursor: default;
+  }
+  @keyframes lbIn { from{transform:scale(0.6);opacity:0;}to{transform:scale(1);opacity:1;} }
+  #lbClose { position: fixed; top: 20px; right: 28px; font-size: 36px; color: #60c040; cursor: pointer; z-index: 1000; line-height:1; user-select:none; }
+  #lbClose:hover { transform: scale(1.2); }
+
+  .controls {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 20; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    padding: 10px 18px; border-radius: 40px; border: 2px solid rgba(80,180,60,0.5);
+    background: rgba(255,255,255,0.3); color: #2a6020; font-size: 14px; cursor: pointer;
+    backdrop-filter: blur(8px); transition: all 0.25s; font-weight: 600;
+  }
+  .btn:hover { background: rgba(255,255,255,0.55); transform: translateY(-3px) scale(1.05); }
+  .btn.active { background: rgba(100,200,80,0.4); border-color: #50c030; color: #1a5010; }
+
+  #cakeWrap {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -55%);
+    z-index: 15; display: none; flex-direction: column; align-items: center;
+  }
+  #cakeWrap.visible { display: flex; }
+  .cake-svg { filter: drop-shadow(0 0 24px rgba(120,220,100,0.6)); }
+
+  #surpriseBox {
+    position: fixed; inset: 0; z-index: 40; display: none;
+    align-items: center; justify-content: center; background: rgba(0,0,0,0.4);
+  }
+  #surpriseBox.visible { display: flex; }
+  .sbox-inner {
+    background: linear-gradient(135deg, #e8f8d0, #c8f0a0);
+    border: 2px solid #70c040; border-radius: 20px; padding: 28px 36px;
+    text-align: center; color: #2a5010; max-width: 340px;
+    box-shadow: 0 0 40px rgba(100,200,60,0.4);
+    animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+  }
+  @keyframes popIn { 0%{transform:scale(0) rotate(-10deg);opacity:0;}100%{transform:scale(1) rotate(0);opacity:1;} }
+  .sbox-inner h2 { font-size: 22px; color: #3a8020; margin-bottom: 10px; }
+  .sbox-inner p { font-size: 15px; color: #2a5010; line-height: 1.6; }
+  .sbox-close { margin-top: 16px; padding: 8px 24px; border-radius: 30px; background: #60b030; color: #fff; border: none; cursor: pointer; font-weight: 600; font-size: 14px; }
+
+  #toastContainer { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100; pointer-events: none; }
+  .toast {
+    background: rgba(100,200,70,0.97); color: #1a4010; padding: 10px 24px;
+    border-radius: 30px; font-weight: 600; font-size: 15px; margin-bottom: 8px;
+    animation: toastIn 0.4s ease, toastOut 0.4s ease 2.6s forwards; white-space: nowrap;
+  }
+  @keyframes toastIn { from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);} }
+  @keyframes toastOut { to{opacity:0;transform:translateY(-16px);} }
+
+  /* ── Title D ── */
+  .title-wrap {
+    position: absolute; top: 26px; left: 50%; transform: translateX(-50%);
+    z-index: 6; text-align: center; pointer-events: none; white-space: nowrap;
+  }
+  .title-row {
+    display: flex; align-items: baseline; justify-content: center; gap: 0; line-height: 1;
+  }
+  .title-happy {
+    font-family: 'Georgia', serif; font-size: 46px; font-weight: 700; letter-spacing: 2px;
+    color: #1e6e10;
+    text-shadow: 2px 2px 0 rgba(100,200,60,0.25), 0 0 20px rgba(80,180,40,0.2);
+  }
+  .title-birth {
+    font-family: 'Georgia', serif; font-size: 46px; font-weight: 700; letter-spacing: 2px;
+    background: linear-gradient(180deg, #88e040 0%, #3a9820 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 2px 6px rgba(80,180,40,0.3));
+    margin-left: 14px;
+  }
+  .title-sub {
+    font-size: 12px; letter-spacing: 14px; text-transform: uppercase;
+    color: rgba(40,120,20,0.65); display: block; margin-top: 5px;
+    font-family: sans-serif; font-weight: 400;
+    animation: fadeSlide 1.4s ease both;
+  }
+  .title-icons {
+    font-size: 20px; display: block; margin-top: 4px;
+    letter-spacing: 8px;
+    animation: drift 3.5s ease-in-out infinite;
+  }
+  @keyframes fadeSlide { from{opacity:0;letter-spacing:24px;}to{opacity:1;letter-spacing:14px;} }
+  @keyframes drift { 0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);} }
+</style>
+
+<div id="scene">
+  <canvas id="bgCanvas"></canvas>
+  <canvas id="fxCanvas"></canvas>
+
+  <div class="title-wrap">
+    <div class="title-row">
+      <span class="title-happy">Happy</span>
+      <span class="title-birth">Birthday</span>
+    </div>
+    <span class="title-sub">celebrating you</span>
+    <span class="title-icons">🌸 &nbsp; 🎂 &nbsp; 🌷</span>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <div class="controls">
+    <button class="btn" id="btnStar" onclick="toggleFX('star')">⭐ Stars</button>
+    <button class="btn" id="btnRain" onclick="toggleFX('rain')">🌧️ Rain</button>
+    <button class="btn" id="btnSnow" onclick="toggleFX('snow')">❄️ Snow</button>
+    <button class="btn" id="btnCake" onclick="toggleCake()">🎂 Surprise Cake</button>
+  </div>
+
+  <div id="cakeWrap">
+    <svg class="cake-svg" width="220" height="280" viewBox="0 0 220 280">
+      <defs>
+        <radialGradient id="cg1" cx="50%" cy="30%"><stop offset="0%" stop-color="#f0a0c8"/><stop offset="100%" stop-color="#c060a0"/></radialGradient>
+        <radialGradient id="cg2" cx="50%" cy="30%"><stop offset="0%" stop-color="#a8e890"/><stop offset="100%" stop-color="#60b040"/></radialGradient>
+      </defs>
+      <ellipse cx="110" cy="252" rx="90" ry="14" fill="rgba(100,180,60,0.2)"/>
+      <rect x="30" y="190" width="160" height="60" rx="8" fill="url(#cg1)"/>
+      <rect x="30" y="186" width="160" height="12" rx="6" fill="#fff0f8"/>
+      <rect x="50" y="125" width="120" height="65" rx="8" fill="url(#cg2)"/>
+      <rect x="50" y="121" width="120" height="12" rx="6" fill="#f0fff0"/>
+      <rect x="72" y="72" width="76" height="55" rx="8" fill="url(#cg1)"/>
+      <rect x="72" y="68" width="76" height="12" rx="6" fill="#fff0f8"/>
+      <circle cx="70" cy="215" r="3" fill="#f0d040"/><circle cx="90" cy="208" r="2.5" fill="#80d060"/>
+      <circle cx="115" cy="218" r="3" fill="#f080c0"/><circle cx="140" cy="210" r="2.5" fill="#80c0f0"/>
+      <circle cx="160" cy="220" r="3" fill="#f0d040"/>
+      <circle cx="80" cy="148" r="2.5" fill="#f0d040"/><circle cx="105" cy="155" r="3" fill="#f080c0"/>
+      <circle cx="130" cy="142" r="2.5" fill="#80d060"/>
+      <rect x="95" y="46" width="10" height="26" rx="4" fill="#f0d040"/>
+      <rect x="115" y="42" width="10" height="30" rx="4" fill="#f080c0"/>
+      <rect x="135" y="46" width="10" height="26" rx="4" fill="#80c0f0"/>
+      <ellipse cx="100" cy="44" rx="5" ry="8" fill="#ffee44" opacity="0.95"/>
+      <ellipse cx="120" cy="40" rx="5" ry="8" fill="#ffcc44" opacity="0.95"/>
+      <ellipse cx="140" cy="44" rx="5" ry="8" fill="#ffee44" opacity="0.95"/>
+      <text x="110" y="168" text-anchor="middle" font-size="13" fill="#1a5010" font-weight="600" font-family="sans-serif">Happy Birthday!</text>
+    </svg>
+    <button class="btn" onclick="showSurprise()" style="margin-top:10px;">🎁 Open Surprise!</button>
+    <button class="btn" onclick="toggleCake()" style="margin-top:6px;font-size:12px;opacity:0.7;">Close</button>
+  </div>
+
+  <div id="surpriseBox">
+    <div class="sbox-inner">
+      <div style="font-size:48px;margin-bottom:10px;">🌸🎁🌼</div>
+      <h2>Surprise!</h2>
+      <p>Like the first spring bloom in Germany, may your birthday bring fresh joy, warm sunshine, and everything your heart desires!</p>
+      <p style="margin-top:10px;color:#3a8020;font-size:13px;">🌷 You make the world more beautiful 🌷</p>
+      <button class="sbox-close" onclick="closeSurprise()">Close</button>
+    </div>
+  </div>
+
+  <div id="lightbox" onclick="closeLightbox()">
+    <div id="lbClose" onclick="closeLightbox()">✕</div>
+    <img id="lbImg" src="" alt="Photo" onclick="event.stopPropagation()"/>
+  </div>
+</div>
+
+<script>
+const bgCanvas = document.getElementById('bgCanvas');
+const fxCanvas = document.getElementById('fxCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+const fxCtx = fxCanvas.getContext('2d');
+
+function resize() {
+  const sc = document.getElementById('scene');
+  const Ww = sc.offsetWidth, Hh = Math.max(window.innerHeight, 600);
+  bgCanvas.width = fxCanvas.width = Ww;
+  bgCanvas.height = fxCanvas.height = Hh;
+  sc.style.minHeight = Hh + 'px';
+}
+resize(); window.addEventListener('resize', resize);
+const W = () => bgCanvas.width, H = () => bgCanvas.height;
+
+const PHOTOS = [
+  'https://i.ibb.co/prMSyVj1/Screenshot-2.png',
+  'https://i.ibb.co/rfG8331s/Screenshot-2026-01-23-090126.png',
+  'https://i.ibb.co/prMSyVj1/Screenshot-2.png',
+  'https://i.ibb.co/rfG8331s/Screenshot-2026-01-23-090126.png',
+  'https://i.ibb.co/prMSyVj1/Screenshot-2.png',
+];
+const positions = [[8,12],[75,8],[42,70],[10,68],[70,38]];
+const delays = [0,1.2,2.5,0.7,3.1];
+
+PHOTOS.forEach((src, i) => {
+  const frame = document.createElement('div');
+  frame.className = 'photo-frame';
+  frame.style.left = positions[i][0] + '%';
+  frame.style.top = positions[i][1] + '%';
+  frame.style.animationDelay = delays[i] + 's';
+  frame.style.animationDuration = (4.5 + i * 0.4) + 's';
+  const img = document.createElement('img');
+  img.src = src; img.alt = 'Birthday photo';
+  img.onerror = () => { frame.style.background = 'linear-gradient(135deg,#f0a0c8,#a8e890)'; };
+  frame.appendChild(img);
+  frame.addEventListener('click', () => openLightbox(src));
+  document.getElementById('scene').appendChild(frame);
+});
+
+function openLightbox(src) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeLightbox(); });
+
+const SPRING = ['🌸','🌺','🌼','🌷','🌻','🍀','🌹','💐','🌸','🌼','🌷','🌸'];
+const bgP = [];
+for (let i = 0; i < 45; i++) bgP.push({
+  x: Math.random(), y: Math.random(),
+  vx: (Math.random()-0.5)*0.001, vy: Math.random()*0.00035+0.0001,
+  rot: Math.random()*Math.PI*2, rotV: (Math.random()-0.5)*0.035,
+  size: 13+Math.random()*15, alpha: 0.5+Math.random()*0.5,
+  wave: Math.random()*Math.PI*2, waveSpeed: 0.005+Math.random()*0.008,
+  emoji: SPRING[Math.floor(Math.random()*SPRING.length)], phase: Math.random()*360
+});
+
+function drawClouds(ctx, w, h) {
+  ctx.save(); ctx.globalAlpha = 0.18; ctx.fillStyle = '#ffffff';
+  [[0.12,0.08,40],[0.18,0.07,30],[0.08,0.09,28],[0.55,0.05,50],[0.62,0.04,38],[0.48,0.06,32],[0.85,0.12,44],[0.92,0.11,30],[0.78,0.13,35]].forEach(c => {
+    ctx.beginPath(); ctx.arc(c[0]*w, c[1]*h, c[2], 0, Math.PI*2); ctx.fill();
+  });
+  ctx.restore();
+}
+function drawHills(ctx, w, h) {
+  ctx.save();
+  ctx.globalAlpha = 0.22; ctx.fillStyle = '#5ab830';
+  ctx.beginPath(); ctx.moveTo(0,h); ctx.quadraticCurveTo(w*0.25,h*0.72,w*0.5,h*0.82); ctx.quadraticCurveTo(w*0.75,h*0.92,w,h*0.76); ctx.lineTo(w,h); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 0.16; ctx.fillStyle = '#78d040';
+  ctx.beginPath(); ctx.moveTo(0,h); ctx.quadraticCurveTo(w*0.3,h*0.84,w*0.6,h*0.88); ctx.quadraticCurveTo(w*0.8,h*0.92,w,h*0.85); ctx.lineTo(w,h); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function drawBG() {
+  bgCtx.clearRect(0,0,W(),H());
+  drawClouds(bgCtx,W(),H()); drawHills(bgCtx,W(),H());
+  const t = Date.now()*0.001;
+  bgP.forEach(p => {
+    p.wave+=p.waveSpeed; p.x+=p.vx+Math.sin(p.wave)*0.0007; p.y+=p.vy; p.rot+=p.rotV;
+    if(p.y>1.05){p.y=-0.05;p.x=Math.random();}
+    if(p.x<-0.05)p.x=1.05; if(p.x>1.05)p.x=-0.05;
+    bgCtx.save();
+    bgCtx.globalAlpha=p.alpha*(0.65+0.35*Math.sin(t*1.1+p.phase));
+    bgCtx.translate(p.x*W(),p.y*H()); bgCtx.rotate(p.rot);
+    bgCtx.font=p.size+'px serif'; bgCtx.textAlign='center'; bgCtx.textBaseline='middle';
+    bgCtx.fillText(p.emoji,0,0); bgCtx.restore();
+  });
+}
+
+let fxMode = null;
+const fxP = [];
+const fxBtns = {star:'btnStar',rain:'btnRain',snow:'btnSnow'};
+
+function toggleFX(mode) {
+  if(fxMode===mode){fxMode=null;fxP.length=0;document.getElementById(fxBtns[mode]).classList.remove('active');}
+  else {
+    Object.values(fxBtns).forEach(id=>document.getElementById(id).classList.remove('active'));
+    fxMode=mode; fxP.length=0;
+    document.getElementById(fxBtns[mode]).classList.add('active');
+    showToast(mode==='star'?'✨ Stars!':mode==='rain'?'🌧️ Spring rain!':'❄️ Late spring snow!');
+  }
+}
+
+function drawSnowflake(ctx, x, y, r, alpha, rot) {
+  ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle='#cceeff'; ctx.lineWidth=1.2;
+  ctx.translate(x,y); ctx.rotate(rot);
+  for(let a=0;a<6;a++){
+    ctx.save(); ctx.rotate((a*Math.PI)/3);
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-r); ctx.stroke();
+    const b=r*0.45;
+    ctx.beginPath(); ctx.moveTo(0,-b); ctx.lineTo(r*0.28,-b*0.65); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-b); ctx.lineTo(-r*0.28,-b*0.65); ctx.stroke();
+    const b2=r*0.72;
+    ctx.beginPath(); ctx.moveTo(0,-b2); ctx.lineTo(r*0.2,-b2*0.78); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-b2); ctx.lineTo(-r*0.2,-b2*0.78); ctx.stroke();
+    ctx.restore();
+  }
+  ctx.beginPath(); ctx.arc(0,0,r*0.12,0,Math.PI*2); ctx.fillStyle='#ddf4ff'; ctx.fill();
+  ctx.restore();
+}
+
+function spawnFX() {
+  if(!fxMode) return;
+  if(fxMode==='star'){
+    for(let i=0;i<3;i++) fxP.push({x:Math.random()*W(),y:Math.random()*H()*0.7,vx:(Math.random()-0.5)*1.2,vy:-0.5-Math.random()*1.5,size:8+Math.random()*14,alpha:1,life:1,decay:0.008+Math.random()*0.006,emoji:'⭐',rot:Math.random()*360,rotV:(Math.random()-0.5)*3,twinkle:Math.random()*Math.PI*2});
+  } else if(fxMode==='rain'){
+    for(let i=0;i<5;i++) fxP.push({x:Math.random()*W(),y:-10,vx:(Math.random()-0.5)*0.5,vy:6+Math.random()*4,len:12+Math.random()*14,alpha:0.4+Math.random()*0.35,life:1,decay:0,isRain:true,color:`hsl(${190+Math.random()*30},70%,${55+Math.random()*20}%)`});
+  } else if(fxMode==='snow'){
+    fxP.push({x:Math.random()*W(),y:-16,vx:(Math.random()-0.5)*0.7,vy:0.9+Math.random()*1.6,r:5+Math.random()*9,alpha:0.7+Math.random()*0.25,life:1,decay:0,isSnow:true,rot:Math.random()*Math.PI*2,rotV:(Math.random()-0.5)*0.02,wave:Math.random()*Math.PI*2,waveS:0.03+Math.random()*0.03,waveA:0.7+Math.random()*1.0});
+  }
+}
+
+function drawFX() {
+  fxCtx.clearRect(0,0,W(),H());
+  const t=Date.now()*0.001;
+  for(let i=fxP.length-1;i>=0;i--){
+    const p=fxP[i];
+    if(p.isRain){
+      if(p.y>H()+20){fxP.splice(i,1);continue;}
+      p.x+=p.vx; p.y+=p.vy;
+      fxCtx.save(); fxCtx.globalAlpha=p.alpha; fxCtx.strokeStyle=p.color; fxCtx.lineWidth=1.5;
+      fxCtx.beginPath(); fxCtx.moveTo(p.x,p.y); fxCtx.lineTo(p.x+p.vx*2,p.y+p.len); fxCtx.stroke(); fxCtx.restore();
+    } else if(p.isSnow){
+      if(p.y>H()+30){fxP.splice(i,1);continue;}
+      p.wave+=p.waveS; p.x+=p.vx+Math.sin(p.wave)*p.waveA*0.08; p.y+=p.vy; p.rot+=p.rotV;
+      drawSnowflake(fxCtx,p.x,p.y,p.r,p.alpha,p.rot);
+    } else {
+      p.life-=p.decay;
+      if(p.life<=0){fxP.splice(i,1);continue;}
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.rotV; p.vy+=0.02;
+      fxCtx.save(); fxCtx.globalAlpha=p.alpha*p.life*(0.7+0.3*Math.sin(t*6+p.twinkle));
+      fxCtx.translate(p.x,p.y); fxCtx.rotate(p.rot*Math.PI/180);
+      fxCtx.font=p.size+'px serif'; fxCtx.textAlign='center'; fxCtx.textBaseline='middle';
+      fxCtx.fillText(p.emoji,0,0); fxCtx.restore();
+    }
+  }
+  if(fxMode && fxP.length<500) spawnFX();
+}
+
+function loop(){drawBG();drawFX();requestAnimationFrame(loop);}
+loop();
+
+let cakeVisible=false;
+function toggleCake(){
+  cakeVisible=!cakeVisible;
+  document.getElementById('cakeWrap').classList.toggle('visible',cakeVisible);
+  document.getElementById('btnCake').classList.toggle('active',cakeVisible);
+  if(cakeVisible) showToast('🎂 Birthday cake!');
+}
+function showSurprise(){document.getElementById('surpriseBox').classList.add('visible');triggerConfetti();}
+function closeSurprise(){document.getElementById('surpriseBox').classList.remove('visible');}
+
+function triggerConfetti(){
+  const em=['🌸','🌼','✨','🌟','💚','🎉','🎊','🌷'];
+  for(let i=0;i<40;i++) fxP.push({x:W()/2+(Math.random()-0.5)*200,y:H()/2,vx:(Math.random()-0.5)*8,vy:-4-Math.random()*6,size:14+Math.random()*12,alpha:1,life:1,decay:0.012+Math.random()*0.008,emoji:em[Math.floor(Math.random()*em.length)],rot:Math.random()*360,rotV:(Math.random()-0.5)*6,twinkle:Math.random()*Math.PI*2});
+}
+
+function showToast(msg){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  c.appendChild(t);setTimeout(()=>t.remove(),3200);
+}
+</script>
+
+</body>
+</html>
