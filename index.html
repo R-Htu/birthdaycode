@@ -66,12 +66,23 @@
     display: flex; gap: 8px; z-index: 20; flex-wrap: wrap; justify-content: center;
   }
 
-  @media (max-width: 600px) {
+@media (max-width: 600px) {
   .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 90%;
+  }
+  .btn-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    width: 90%;
+    width: 100%;
+  }
+  .btn-full {
+    width: 50%;
+    text-align: center;
   }
   .btn {
     font-size: 12px;
@@ -183,13 +194,15 @@
 
   <div id="toastContainer"></div>
 
-  <div class="controls">
+<div class="controls">
+  <div class="btn-grid">
     <button class="btn" id="btnStar" onclick="toggleFX('star')">⭐ Stars</button>
     <button class="btn" id="btnRain" onclick="toggleFX('rain')">🌧️ Rain</button>
     <button class="btn" id="btnSnow" onclick="toggleFX('snow')">❄️ Snow</button>
     <button class="btn" id="btnFire" onclick="toggleFX('fire')">🎆 Fireworks</button>
-    <button class="btn" id="btnCake" onclick="toggleCake()">🎂 Surprise Cake</button>
   </div>
+  <button class="btn btn-full" id="btnCake" onclick="toggleCake()">🎂 Surprise Cake</button>
+</div>
 
   <div id="cakeWrap">
     <svg class="cake-svg" width="220" height="280" viewBox="0 0 220 280">
@@ -268,7 +281,7 @@ const PHOTOS = [
 
 function placePhotos() {
   document.querySelectorAll('.photo-frame').forEach(f => f.remove());
-  const positions = [[5,25],[72,23],[38,55]];
+  const positions = [[5,25],[72,25],[38,52]];
   const delays = [0,1.2,2.5];
   PHOTOS.forEach((src,i) => {
     const frame = document.createElement('div');
