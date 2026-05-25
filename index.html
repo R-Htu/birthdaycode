@@ -15,20 +15,10 @@
     font-family: sans-serif; overflow: hidden;
     transition: background 1.5s ease;
   }
-  #scene.mode-star {
-    background: linear-gradient(180deg, #0a0a2e 0%, #1a1a4e 40%, #0d0d1f 100%);
-  }
-  #scene.mode-rain {
-    background: linear-gradient(180deg, #5a6a7a 0%, #7a8a9a 30%, #9aaabb 60%, #b0c0cc 100%);
-  }
-
-    #scene.mode-snow {
-  background: linear-gradient(180deg, #6a7a82 0%, #8a9aa2 25%, #a0b0b8 60%, #b8c8d0 100%);
-}
-  
-  #scene.mode-fire {
-    background: linear-gradient(180deg, #0a0015 0%, #1a0030 30%, #0d001a 70%, #05000f 100%);
-  }
+  #scene.mode-star { background: linear-gradient(180deg, #0a0a2e 0%, #1a1a4e 40%, #0d0d1f 100%); }
+  #scene.mode-rain { background: linear-gradient(180deg, #5a6a7a 0%, #7a8a9a 30%, #9aaabb 60%, #b0c0cc 100%); }
+  #scene.mode-snow { background: linear-gradient(180deg, #6a7a82 0%, #8a9aa2 25%, #a0b0b8 60%, #b8c8d0 100%); }
+  #scene.mode-fire { background: linear-gradient(180deg, #0a0015 0%, #1a0030 30%, #0d001a 70%, #05000f 100%); }
 
   canvas#bgCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
   canvas#fxCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
@@ -61,59 +51,33 @@
   @keyframes lbIn { from{transform:scale(0.6);opacity:0;}to{transform:scale(1);opacity:1;} }
   #lbClose { position: fixed; top: 20px; right: 28px; font-size: 36px; color: #60c040; cursor: pointer; z-index: 1000; line-height:1; user-select:none; }
 
-  .controls {
+.controls {
     position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center;
-    gap: 8px; z-index: 20; width: 90%;
+    gap: 8px; z-index: 20; width: 88%;
+    max-width: 360px;
   }
-
-@media (max-width: 600px) {
-<<<<<<< HEAD
-  .controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    width: 90%;
-  }
-=======
->>>>>>> b27a3c8 (updated)
-  .btn-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-  }
-  .btn-full {
-<<<<<<< HEAD
-    width: 50%;
-=======
-    width: 55%;
->>>>>>> b27a3c8 (updated)
-    text-align: center;
-  }
-  .btn {
-    font-size: 12px;
-    padding: 10px 8px;
-    text-align: center;
-  }
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  width: 100%;
 }
-  .btn {
-    padding: 10px 18px;
+  .btn-full {
+    width: 55%;
+    text-align: center;
+  }
+.btn {
+    padding: 10px 4px;
     border: 2px solid rgba(80,180,60,0.6);
     background: rgba(255,255,255,0.3);
-    color: #2a6020; font-size: 13px; cursor: pointer;
+    color: #2a6020; font-size: 11px; cursor: pointer;
     backdrop-filter: blur(8px); transition: all 0.25s; font-weight: 700;
-    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    text-align: center; white-space: nowrap;
   }
-  .btn:hover {
-    background: rgba(255,255,255,0.6);
-    transform: translateY(-3px) scale(1.06);
-  }
-  .btn.active {
-    background: rgba(100,200,80,0.5);
-    border-color: #50c030; color: #1a5010;
-  }
+  .btn:hover { background: rgba(255,255,255,0.6); transform: translateY(-3px) scale(1.06); }
+  .btn.active { background: rgba(100,200,80,0.5); border-color: #50c030; color: #1a5010; }
   .mode-star .btn { color: #ccddff; border-color: rgba(150,150,255,0.5); background: rgba(20,20,80,0.5); }
   .mode-fire .btn { color: #ffddaa; border-color: rgba(255,150,50,0.5); background: rgba(40,0,60,0.5); }
 
@@ -130,7 +94,7 @@
   }
   #surpriseBox.visible { display: flex; }
   .sbox-inner {
-    background: linear-gradient(135deg, #1a2a3a, #161616, #a7c5ff);
+    background: linear-gradient(135deg, #1a2a3a, #2a3a4a, #1a2535);
     border: 2px solid #ffd700; border-radius: 20px; padding: 28px 36px;
     text-align: center; color: #ffeedd; max-width: 340px;
     box-shadow: 0 0 60px rgba(255,180,0,0.4), 0 0 120px rgba(200,100,255,0.3);
@@ -158,8 +122,7 @@
   .title-row { display: flex; align-items: baseline; justify-content: center; line-height: 1; }
   .title-happy {
     font-family: 'Georgia', serif; font-size: 30px; font-weight: 700; letter-spacing: 2px;
-    color: #1e6e10;
-    text-shadow: 2px 2px 0 rgba(100,200,60,0.25);
+    color: #1e6e10; text-shadow: 2px 2px 0 rgba(100,200,60,0.25);
     transition: color 0.8s, text-shadow 0.8s;
   }
   .title-birth {
@@ -202,28 +165,28 @@
 
   <div id="toastContainer"></div>
 
-<div class="controls">
-  <div class="btn-grid">
-    <button class="btn" id="btnStar" onclick="toggleFX('star')">⭐ Stars</button>
-    <button class="btn" id="btnRain" onclick="toggleFX('rain')">🌧️ Rain</button>
-    <button class="btn" id="btnSnow" onclick="toggleFX('snow')">❄️ Snow</button>
-    <button class="btn" id="btnFire" onclick="toggleFX('fire')">🎆 Fireworks</button>
-  </div>
-  <button class="btn btn-full" id="btnCake" onclick="toggleCake()">🎂 Surprise Cake</button>
+  <div class="controls">
+<div class="btn-grid">
+  <button class="btn" id="btnStar" onclick="toggleFX('star')">⭐ Stars</button>
+  <button class="btn" id="btnRain" onclick="toggleFX('rain')">🌧️ Rain</button>
+  <button class="btn" id="btnSnow" onclick="toggleFX('snow')">❄️ Snow</button>
+  <button class="btn" id="btnFire" onclick="toggleFX('fire')">🎆 Fireworks</button>
+  <button class="btn" id="btnMusic" onclick="toggleMusic()">🎵 Music</button>
+  <button class="btn" id="btnCake" onclick="toggleCake()" style="white-space:nowrap;">🎂 Cake</button>
 </div>
+  </div>
 
   <div id="cakeWrap">
     <svg class="cake-svg" width="220" height="280" viewBox="0 0 220 280">
       <defs>
-   <radialGradient id="cg1" cx="50%" cy="30%">
-  <stop offset="0%" stop-color="#c4a0c8"/>
-  <stop offset="100%" stop-color="#6a2a7a"/>
-</radialGradient>
-
-<radialGradient id="cg2" cx="50%" cy="30%">
-  <stop offset="0%" stop-color="#d4aa50"/>
-  <stop offset="100%" stop-color="#8a6010"/>
-</radialGradient>
+        <radialGradient id="cg1" cx="50%" cy="30%">
+          <stop offset="0%" stop-color="#c4a0c8"/>
+          <stop offset="100%" stop-color="#6a2a7a"/>
+        </radialGradient>
+        <radialGradient id="cg2" cx="50%" cy="30%">
+          <stop offset="0%" stop-color="#d4aa50"/>
+          <stop offset="100%" stop-color="#8a6010"/>
+        </radialGradient>
       </defs>
       <ellipse cx="110" cy="252" rx="90" ry="14" fill="rgba(100,180,60,0.2)"/>
       <rect x="30" y="190" width="160" height="60" rx="8" fill="url(#cg1)"/>
@@ -316,9 +279,7 @@ function openLightbox(src) {
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
 
-// ── Background particles ──
 const SPRING = ['🌸','🌺','🌼','🌷','🌻','🍀','🌹','💐','🌸','🌼','🌷','🌸'];
-const FROGS  = ['🐸','🌿','🍃','🐸','🌱','🐸','🍀','🐸','🌾','🐸'];
 const bgP = [];
 for(let i=0;i<45;i++) bgP.push({
   x:Math.random(), y:Math.random(),
@@ -328,7 +289,27 @@ for(let i=0;i<45;i++) bgP.push({
   wave:Math.random()*Math.PI*2, waveSpeed:0.005+Math.random()*0.008,
   emoji:SPRING[Math.floor(Math.random()*SPRING.length)], phase:Math.random()*360
 });
+let music = null;
+let musicPlaying = false;
 
+function toggleMusic() {
+  if (!music) {
+    music = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_8cb749b7b0.mp3');
+    music.loop = true;
+    music.volume = 0.4;
+  }
+  if (musicPlaying) {
+    music.pause();
+    musicPlaying = false;
+    document.getElementById('btnMusic').textContent = '🎵 Music';
+    document.getElementById('btnMusic').classList.remove('active');
+  } else {
+    music.play().catch(e => showToast('Tap again to play music!'));
+    musicPlaying = true;
+    document.getElementById('btnMusic').textContent = '🎶 On';
+    document.getElementById('btnMusic').classList.add('active');
+  }
+}
 function drawClouds(ctx, w, h, heavy=false) {
   ctx.save();
   ctx.globalAlpha = heavy ? 0.55 : 0.18;
@@ -354,7 +335,6 @@ function drawHills(ctx, w, h) {
 
 function drawStarsBG(ctx, w, h) {
   ctx.save();
-  // twinkling stars
   const t = Date.now()*0.001;
   for(let s=0;s<120;s++){
     const sx = ((s*137.5)%100/100)*w;
@@ -365,29 +345,33 @@ function drawStarsBG(ctx, w, h) {
     const r = s%7===0?2.5:s%4===0?1.8:1.2;
     ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.fill();
   }
-  // moon
   ctx.globalAlpha=0.9;
   ctx.fillStyle='#fff8cc';
   ctx.shadowColor='#fffaaa'; ctx.shadowBlur=30;
   ctx.beginPath(); ctx.arc(w*0.82,h*0.12,28,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#1a1a4e';
-  ctx.shadowBlur=0;
+  ctx.fillStyle='#1a1a4e'; ctx.shadowBlur=0;
   ctx.beginPath(); ctx.arc(w*0.82+10,h*0.12-6,22,0,Math.PI*2); ctx.fill();
   ctx.restore();
 }
 
-function drawFogBG(ctx, w, h) {
-  // green foggy ground for frog mode
+function drawMistBG(ctx, w, h) {
   ctx.save();
-  for(let layer=0;layer<4;layer++){
-    const y = h*(0.5+layer*0.12);
-    const grad = ctx.createLinearGradient(0,y-40,0,y+40);
-    grad.addColorStop(0,'rgba(100,180,80,0)');
-    grad.addColorStop(0.5,`rgba(120,200,90,${0.08+layer*0.04})`);
-    grad.addColorStop(1,'rgba(80,160,60,0)');
-    ctx.fillStyle=grad;
-    ctx.fillRect(0,y-40,w,80);
+  const t = Date.now()*0.0005;
+  for(let layer=0; layer<5; layer++){
+    const y = h*(0.3+layer*0.15);
+    const offset = Math.sin(t+layer*1.2)*40;
+    const grad = ctx.createLinearGradient(0, y-60, 0, y+60);
+    grad.addColorStop(0, 'rgba(220,230,240,0)');
+    grad.addColorStop(0.5, `rgba(200,215,230,${0.12+layer*0.05})`);
+    grad.addColorStop(1, 'rgba(220,230,240,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(offset, y-60, w+80, 120);
   }
+  const frost = ctx.createLinearGradient(0, h*0.75, 0, h);
+  frost.addColorStop(0, 'rgba(220,235,245,0)');
+  frost.addColorStop(1, 'rgba(210,228,240,0.4)');
+  ctx.fillStyle = frost;
+  ctx.fillRect(0, h*0.75, w, h*0.25);
   ctx.restore();
 }
 
@@ -398,14 +382,12 @@ function drawBG() {
   } else if(fxMode==='rain'){
     drawClouds(bgCtx,W(),H(),true);
     drawHills(bgCtx,W(),H());
-  }  else if(fxMode==='snow'){
+  } else if(fxMode==='snow'){
     drawClouds(bgCtx,W(),H(),true);
     drawHills(bgCtx,W(),H());
     drawMistBG(bgCtx,W(),H());
   } else if(fxMode==='fire'){
-    // celebratory dark bg - draw some distant city lights
-    bgCtx.save();
-    bgCtx.globalAlpha=0.3;
+    bgCtx.save(); bgCtx.globalAlpha=0.3;
     for(let b=0;b<30;b++){
       const bx=((b*73)%100/100)*W();
       const bh=20+((b*53)%60);
@@ -420,11 +402,10 @@ function drawBG() {
   }
 
   const t=Date.now()*0.001;
-  const emojiSet = fxMode==='snow' ? FROGS : SPRING;
-  bgP.forEach((p,idx) => {
-    if(fxMode==='star') return; // no flowers in star mode
+  bgP.forEach(p => {
+    if(fxMode==='star') return;
     p.wave+=p.waveSpeed; p.x+=p.vx+Math.sin(p.wave)*0.0007; p.y+=p.vy; p.rot+=p.rotV;
-    if(p.y>1.05){p.y=-0.05;p.x=Math.random(); p.emoji=emojiSet[Math.floor(Math.random()*emojiSet.length)];}
+    if(p.y>1.05){p.y=-0.05;p.x=Math.random();}
     if(p.x<-0.05)p.x=1.05; if(p.x>1.05)p.x=-0.05;
     bgCtx.save();
     bgCtx.globalAlpha=p.alpha*(0.65+0.35*Math.sin(t*1.1+p.phase));
@@ -433,32 +414,8 @@ function drawBG() {
     bgCtx.fillText(p.emoji,0,0);
     bgCtx.restore();
   });
-
-  function drawMistBG(ctx, w, h) {
-  ctx.save();
-  // rolling mist layers
-  const t = Date.now()*0.0005;
-  for(let layer=0; layer<5; layer++){
-    const y = h*(0.3+layer*0.15);
-    const offset = Math.sin(t+layer*1.2)*40;
-    const grad = ctx.createLinearGradient(0, y-60, 0, y+60);
-    grad.addColorStop(0, 'rgba(220,230,240,0)');
-    grad.addColorStop(0.5, `rgba(200,215,230,${0.12+layer*0.05})`);
-    grad.addColorStop(1, 'rgba(220,230,240,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(offset, y-60, w+80, 120);
-  }
-  // ground frost
-  const frost = ctx.createLinearGradient(0, h*0.75, 0, h);
-  frost.addColorStop(0, 'rgba(220,235,245,0)');
-  frost.addColorStop(1, 'rgba(210,228,240,0.4)');
-  ctx.fillStyle = frost;
-  ctx.fillRect(0, h*0.75, w, h*0.25);
-  ctx.restore();
-}
 }
 
-// ── FX ──
 let fxMode = null;
 const fxP = [];
 const fxBtns = {star:'btnStar',rain:'btnRain',snow:'btnSnow',fire:'btnFire'};
@@ -488,8 +445,7 @@ function spawnFirework() {
   const y = Math.random()*H()*0.55;
   const hue = Math.random()*360;
   const count = 80+Math.floor(Math.random()*50);
-  // rocket trail
-  fxP.push({isRocket:true, x, y:H(), tx:x, ty:y, vx:0, vy:-18, hue, life:1, decay:0.018, size:3});
+  fxP.push({isRocket:true, x, y:H(), tx:x, ty:y, vx:0, vy:-28, hue, life:1, decay:0.025, size:3});
   for(let i=0;i<count;i++){
     const angle=(i/count)*Math.PI*2;
     const speed=1.5+Math.random()*6;
@@ -504,7 +460,7 @@ function spawnFirework() {
       delayed:true, delay:3+Math.floor(Math.random()*2)
     });
   }
- fxP.push({isRocket:true, x, y:H(), tx:x, ty:y, vx:0, vy:-28, hue, life:1, decay:0.025, size:3});
+  fxP.push({isFlash:true, x, y, radius:0, maxR:80+Math.random()*60, hue, alpha:0.8, life:1, decay:0.07, delayed:true, delay:3});
 }
 
 function drawSnowflake(ctx,x,y,r,alpha,rot){
@@ -543,7 +499,6 @@ function drawFX(){
   const t=Date.now()*0.001;
   for(let i=fxP.length-1;i>=0;i--){
     const p=fxP[i];
-
     if(p.delayed){ p.delay--; if(p.delay>0) continue; p.delayed=false; }
 
     if(p.isRocket){
@@ -580,7 +535,6 @@ function drawFX(){
       if(p.trail.length>10) p.trail.shift();
       p.x+=p.vx; p.y+=p.vy;
       p.vx*=0.96; p.vy=p.vy*0.96+0.09;
-      // trail
       for(let tr=0;tr<p.trail.length;tr++){
         const ta=(tr/p.trail.length)*p.trail[tr].life*0.6;
         fxCtx.save(); fxCtx.globalAlpha=ta;
@@ -589,7 +543,6 @@ function drawFX(){
         fxCtx.beginPath(); fxCtx.arc(p.trail[tr].x,p.trail[tr].y,p.size*0.6*(tr/p.trail.length),0,Math.PI*2); fxCtx.fill();
         fxCtx.restore();
       }
-      // spark
       fxCtx.save();
       fxCtx.globalAlpha=p.life*(0.85+0.15*Math.sin(t*8+p.twinkle));
       fxCtx.shadowColor=`hsla(${p.hue},100%,80%,1)`; fxCtx.shadowBlur=12;
@@ -601,7 +554,6 @@ function drawFX(){
       fxCtx.beginPath(); fxCtx.arc(p.x,p.y,p.size,0,Math.PI*2); fxCtx.fill();
       fxCtx.restore();
     } else {
-      // emoji star particles
       p.life-=p.decay; if(p.life<=0){fxP.splice(i,1);continue;}
       p.x+=p.vx; p.y+=p.vy; p.rot+=p.rotV; p.vy+=0.02;
       fxCtx.save(); fxCtx.globalAlpha=p.alpha*p.life*(0.7+0.3*Math.sin(t*6+p.twinkle));
@@ -626,8 +578,6 @@ function toggleCake(){
 
 function showSurprise(){
   document.getElementById('surpriseBox').classList.add('visible');
-  // switch to celebrate mode
-  const prevMode=fxMode;
   if(fxMode!=='fire'){ fxMode='fire'; fxP.length=0; setMode('fire'); }
   triggerConfetti();
 }
@@ -649,7 +599,6 @@ function triggerConfetti(){
     rot:Math.random()*360, rotV:(Math.random()-0.5)*6,
     twinkle:Math.random()*Math.PI*2
   });
-  // also shoot fireworks
   for(let f=0;f<5;f++) setTimeout(()=>spawnFirework(), f*400);
 }
 
