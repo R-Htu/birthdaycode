@@ -93,8 +93,8 @@
     align-items: center; justify-content: center; background: rgba(0,0,0,0.5);
   }
   #surpriseBox.visible { display: flex; }
-  .sbox-inner {
-    background: linear-gradient(135deg, #1a2a3a, #2a3a4a, #1a2535);
+   .sbox-inner {
+    background: linear-gradient(135deg, rgba(26,42,58,0.75), rgba(42,58,74,0.75)), url('https://i.ibb.co/Y4MTb6s8/IMG-2695.jpg') center/cover no-repeat;
     border: 2px solid #ffd700; border-radius: 20px; padding: 28px 36px;
     text-align: center; color: #ffeedd; max-width: 340px;
     box-shadow: 0 0 60px rgba(255,180,0,0.4), 0 0 120px rgba(200,100,255,0.3);
@@ -294,7 +294,7 @@ let musicPlaying = false;
 
 function toggleMusic() {
   if (!music) {
-    music = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_8cb749b7b0.mp3');
+    music = new Audio('music.mp3');
     music.loop = true;
     music.volume = 0.4;
   }
